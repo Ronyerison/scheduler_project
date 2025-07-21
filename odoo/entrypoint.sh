@@ -2,7 +2,7 @@
 
 set -e
 
-echo "Parâmetros recebidos: $3 $4"
+echo "🛠️ Parâmetros recebidos: $3 $4"
 echo "🚀 Iniciando Odoo Arena..."
 
 # Configuração das variáveis de ambiente
