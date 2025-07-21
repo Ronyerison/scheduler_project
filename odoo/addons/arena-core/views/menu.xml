@@ -1,0 +1,16 @@
+<odoo>
+    <menuitem id="base.menu_management"
+              groups="base.group_system" />
+
+    <menuitem id="menu_arena_root"
+              name="Arena" />
+
+    <menuitem id="menu_arena_example"
+              name="Exemplos"
+              parent="menu_arena_root" />
+
+    <menuitem id="menu_action_arena_example"
+              name="Arena Example"
+              parent="menu_arena_example"
+              action="action_arena_example" />
+</odoo>

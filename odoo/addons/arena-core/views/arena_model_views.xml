@@ -33,7 +33,4 @@
     <field name="view_mode">tree,form</field>
   </record>
 
-  <menuitem id="menu_arena_root" name="Arena"/>
-  <menuitem id="menu_arena_example" name="Exemplos" parent="menu_arena_root"/>
-  <menuitem id="menu_action_arena_example" name="Arena Example" parent="menu_arena_example" action="action_arena_example"/>
 </odoo>
