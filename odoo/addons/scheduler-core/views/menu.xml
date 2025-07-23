@@ -1,0 +1,16 @@
+<odoo>
+    <menuitem id="base.menu_management"
+              groups="base.group_system" />
+
+    <menuitem id="menu_scheduler_root"
+              name="Scheduler" />
+
+    <menuitem id="menu_scheduler_example"
+              name="Exemplos"
+              parent="menu_scheduler_root" />
+
+    <menuitem id="menu_action_scheduler_example"
+              name="Scheduler Example"
+              parent="menu_scheduler_example"
+              action="action_scheduler_example" />
+</odoo>

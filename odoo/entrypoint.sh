@@ -2,7 +2,8 @@
 
 set -e
 
-echo "🛠️ Parâmetros recebidos: $3 $4"
+echo "🛠️ Parâmetros recebidos: $1 $2 $3 $4"
+echo "🔍 Total de parâmetros: $#"
 echo "🚀 Iniciando Odoo Arena..."
 
 # Configuração das variáveis de ambiente
@@ -48,6 +49,24 @@ if [[ "$3" == "update" ]]; then
         --database="$DB_NAME" \
         -u "$4" \
         --stop-after-init
+elif [[ "$1" == "debug" ]]; then
+    echo "🐛 Iniciando Odoo em modo DEBUG..."
+    echo "📂 Addons path: /mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons"
+    echo "🔗 Acesse: http://localhost:8069"
+    echo "📊 Database: $DB_NAME"
+    echo "🐛 Conectando ao PyCharm na porta: 44785"
+
+    # Instala debugpy se não estiver instalado
+    pip3 install debugpy
+
+    # Aguarda um pouco para garantir que o PyCharm esteja pronto
+    echo "⏳ Aguardando 3 segundos para garantir que o PyCharm esteja pronto..."
+    sleep 3
+
+    # Conecta ao PyCharm (host.docker.internal para Docker Desktop ou host-gateway para Docker Compose)
+    echo "🔌 Tentando conectar ao PyCharm..."
+    python3 -m debugpy --connect host.docker.internal:44785 --wait-for-client /usr/bin/odoo -c /etc/odoo/odoo.conf
+
 else
     echo "🌐 Iniciando servidor Odoo..."
     echo "📂 Addons path: /mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons"

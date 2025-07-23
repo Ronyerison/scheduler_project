@@ -1,7 +1,7 @@
 <odoo>
   <record id="view_arena_example_tree" model="ir.ui.view">
-    <field name="name">arena.example.tree</field>
-    <field name="model">arena.example</field>
+    <field name="name">scheduler.example.tree</field>
+    <field name="model">scheduler.example</field>
     <field name="type">tree</field>
     <field name="arch" type="xml">
       <tree>
@@ -11,12 +11,12 @@
     </field>
   </record>
 
-  <record id="view_arena_example_form" model="ir.ui.view">
-    <field name="name">arena.example.form</field>
-    <field name="model">arena.example</field>
+  <record id="view_scheduler_example_form" model="ir.ui.view">
+    <field name="name">scheduler.example.form</field>
+    <field name="model">scheduler.example</field>
     <field name="type">form</field>
     <field name="arch" type="xml">
-      <form string="Arena Example">
+      <form string="Scheduler Example">
         <sheet>
           <group>
             <field name="name"/>
@@ -27,9 +27,9 @@
     </field>
   </record>
 
-  <record id="action_arena_example" model="ir.actions.act_window">
-    <field name="name">Arena Example</field>
-    <field name="res_model">arena.example</field>
+  <record id="action_scheduler_example" model="ir.actions.act_window">
+    <field name="name">Scheduler Example</field>
+    <field name="res_model">scheduler.example</field>
     <field name="view_mode">tree,form</field>
   </record>
 

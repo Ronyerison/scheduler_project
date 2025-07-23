@@ -1,5 +1,5 @@
 {
-    'name': 'Arena Core',
+    'name': 'Scheduler Core',
     'version': '1.0',
     'author': 'RDB Software Foundation',
     'category': 'Tools',
@@ -10,7 +10,7 @@
     'license': 'LGPL-3',
     'data': [
         'security/ir.model.access.csv',
-        'views/arena_model_views.xml',
+        'views/scheduler_model_views.xml',
         'views/menu.xml',
     ],
     'installable': True,
