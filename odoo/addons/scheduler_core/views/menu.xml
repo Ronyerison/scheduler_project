@@ -1,0 +1,21 @@
+<odoo>
+    <menuitem id="base.menu_management"
+              groups="base.group_system" />
+
+    <menuitem id="menu_cadastros"
+              name="Cadastros" />
+
+        <menuitem id="menu_action_procedimento"
+              name="Procedimento"
+              parent="menu_cadastros"
+              action="scheduler_core_procedimento_action" />
+
+    <menuitem id="menu_configuracoes"
+              name="Configurações" />
+
+        <menuitem id="configuracao_funcionamento_menu"
+              name="Horários de Funcionamento"
+              parent="menu_configuracoes"
+              action="configuracao_funcionamento_action"
+              sequence="1"/>
+</odoo>

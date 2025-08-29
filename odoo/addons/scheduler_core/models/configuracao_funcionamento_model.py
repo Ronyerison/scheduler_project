@@ -4,8 +4,9 @@ from ..enums import SituacaoEstacaoEnum
 
 
 class ConfiguracaoFuncionamentoModel(models.Model):
-    _name = 'scheduler-core.configuracao_funcionamento'
+    _name = 'scheduler_core.configuracao_funcionamento'
     _description = 'Configuração de Funcionamento das estações'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(string='Nome', required=True)
     active = fields.Boolean(string='Ativo', default=True)
