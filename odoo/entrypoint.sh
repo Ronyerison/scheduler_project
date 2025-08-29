@@ -2,79 +2,51 @@
 
 set -e
 
-echo "🛠️ Parâmetros recebidos: $1 $2 $3 $4"
-echo "🔍 Total de parâmetros: $#"
-echo "🚀 Iniciando Odoo Arena..."
-
-# Configuração das variáveis de ambiente
-export PGPASSWORD="$PASSWORD"
-
-echo "📡 Aguardando PostgreSQL ficar disponível..."
-while ! pg_isready -h "$HOST" -p 5432 -U "$USER" -q; do
-  echo "   ⏳ PostgreSQL ainda não está pronto, aguardando..."
-  sleep 3
-done
-
-echo "✅ PostgreSQL está pronto!"
-
-# Verifica se o banco de dados já existe
-echo "🔍 Verificando se o banco '$DB_NAME' existe..."
-if psql -h "$HOST" -U "$USER" -lqt | cut -d \| -f 1 | grep -qw "$DB_NAME"; then
-    echo "✅ Banco '$DB_NAME' já existe"
-else
-    echo "📦 Criando banco '$DB_NAME' e instalando módulos base..."
-    odoo \
-        --addons-path=/mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons \
-        --db_user="$USER" \
-        --db_password="$PASSWORD" \
-        --db_host="$HOST" \
-        --db_port=5432 \
-        --database="$DB_NAME" \
-        --init=base \
-        --without-demo=all \
-        --stop-after-init \
-        --logfile=/dev/stdout
-
-    echo "✅ Banco criado com sucesso!"
+if [ -v PASSWORD_FILE ]; then
+    PASSWORD="$(< $PASSWORD_FILE)"
 fi
 
-if [[ "$3" == "update" ]]; then
-    echo "Atualizando módulos: $4"
-    exec odoo \
-        --db_user="$USER" \
-        --db_password="$PASSWORD" \
-        --db_host="$HOST" \
-        --db_port=5432 \
-        --db-filter=^.*$ \
-        --database="$DB_NAME" \
-        -u "$4" \
-        --stop-after-init
-elif [[ "$1" == "debug" ]]; then
-    echo "🐛 Iniciando Odoo em modo DEBUG..."
-    echo "📂 Addons path: /mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons"
-    echo "🔗 Acesse: http://localhost:8069"
-    echo "📊 Database: $DB_NAME"
-    echo "🐛 Conectando ao PyCharm na porta: 44785"
+# set the postgres database host, port, user and password according to the environment
+# and pass them as arguments to the odoo process if not present in the config file
+: ${HOST:=${DB_PORT_5432_TCP_ADDR:='db'}}
+: ${PORT:=${DB_PORT_5432_TCP_PORT:=5432}}
+: ${USER:=${DB_ENV_POSTGRES_USER:=${POSTGRES_USER:='odoo'}}}
+: ${PASSWORD:=${DB_ENV_POSTGRES_PASSWORD:=${POSTGRES_PASSWORD:='odoo'}}}
 
-    # Instala debugpy se não estiver instalado
-    pip3 install debugpy
+DB_ARGS=()
+function check_config() {
+    param="$1"
+    value="$2"
+    if grep -q -E "^\s*\b${param}\b\s*=" "$ODOO_RC" ; then
+        value=$(grep -E "^\s*\b${param}\b\s*=" "$ODOO_RC" |cut -d " " -f3|sed 's/["\n\r]//g')
+    fi;
+    DB_ARGS+=("--${param}")
+    DB_ARGS+=("${value}")
+}
+check_config "db_host" "$HOST"
+check_config "db_port" "$PORT"
+check_config "db_user" "$USER"
+check_config "db_password" "$PASSWORD"
 
-    # Aguarda um pouco para garantir que o PyCharm esteja pronto
-    echo "⏳ Aguardando 3 segundos para garantir que o PyCharm esteja pronto..."
-    sleep 3
+# redirect stdout and stderr to files
+exec &> >(tee "/var/log/odoo/entrypoint.log")
 
-    # Conecta ao PyCharm (host.docker.internal para Docker Desktop ou host-gateway para Docker Compose)
-    echo "🔌 Tentando conectar ao PyCharm..."
-    python3 -m debugpy --connect host.docker.internal:44785 --wait-for-client /usr/bin/odoo -c /etc/odoo/odoo.conf
+case "$1" in
+    -- | odoo)
+        shift
+        if [[ "$1" == "scaffold" ]] ; then
+            exec odoo "$@"
+        else
+            wait-for-psql.py ${DB_ARGS[@]} --timeout=30
+            exec odoo "$@" "${DB_ARGS[@]}"
+        fi
+        ;;
+    -*)
+        wait-for-psql.py ${DB_ARGS[@]} --timeout=30
+        exec odoo "$@" "${DB_ARGS[@]}"
+        ;;
+    *)
+        exec "$@"
+esac
 
-else
-    echo "🌐 Iniciando servidor Odoo..."
-    echo "📂 Addons path: /mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons"
-    echo "🔗 Acesse: http://localhost:8069"
-    echo "📊 Database: $DB_NAME"
-    echo ""
-
-    # Inicia o Odoo
-    exec odoo -c /etc/odoo/odoo.conf
-fi
-
+exit 1
