@@ -11,9 +11,9 @@ class Agendamento(models.Model):
     responsavel_id = fields.Many2one('res.partner', string='Responsavel', tracking=True, related='estacao_id.responsavel_id', store=True)
     cliente_id = fields.Many2one('res.partner', string='Cliente', tracking=True, required=True)
     procedimento_ids = fields.Many2many('scheduler_core.procedimento', 'agendamento_procedimento_rel', 'agendamento_id', 'procedimento_id', string='Procedimentos', tracking=True)
-    valor_total = fields.Monetary(string='Valor Total', compute='_compute_valor_total', tracking=True, store=True, required=True, readonly=False)
-    valor_pago = fields.Monetary(string='Valor Pago', tracking=True)
-    valor_desconto = fields.Monetary(string='Desconto', tracking=True, compute='_compute_valor_desconto', store=True, readonly=True)
+    valor_total = fields.Float(string='Valor Total', compute='_compute_valor_total', tracking=True, store=True, required=True, readonly=False)
+    valor_pago = fields.Float(string='Valor Pago', tracking=True)
+    valor_desconto = fields.Float(string='Desconto', tracking=True, compute='_compute_valor_desconto', store=True, readonly=True)
 
     @api.depends('procedimento_ids')
     def _compute_valor_total(self):

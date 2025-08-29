@@ -7,9 +7,4 @@ class Procedimento(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(_('Nome'), required=True)
-    valor = fields.Monetary(string='Valor', required=True, currency_field="moeda_id")
-    moeda_id = fields.Many2one(
-        "res.currency",
-        string="Moeda",
-        default=lambda self: self.env.ref("base.BRL"),
-    )
+    valor = fields.Float(string='Valor', required=True, currency_field="moeda_id")
