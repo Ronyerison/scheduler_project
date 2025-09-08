@@ -1,0 +1,243 @@
+<odoo>
+    <record id="scheduler_core_res_partner_view_form" model="ir.ui.view">
+        <field name="name">scheduler_core.res.partner.view.form</field>
+        <field name="model">res.partner</field>
+        <field name="priority" eval="0"/>
+        <field name="arch" type="xml">
+            <form string="Clientes">
+
+                <header>
+
+                </header>
+
+                <div class="alert alert-warning oe_edit_only" role="alert" attrs="{'invisible': [('same_vat_partner_id', '=', False)]}">
+                  A partner with the same <span><span class="o_vat_label">Tax ID</span></span> already exists (<field name="same_vat_partner_id"/>), are you sure to create a new one?
+                </div>
+                <div class="alert alert-warning oe_edit_only" role="alert" attrs="{'invisible': [('same_company_registry_partner_id', '=', False)]}">
+                  A partner with the same <span><span class="o_vat_label">Company Registry</span></span> already exists (<field name="same_company_registry_partner_id"/>), are you sure to create a new one?
+                </div>
+                <sheet>
+                    <field name="tipo" context="{'tipo': 'CLIENTE'}" invisible="1"/>
+                    <div class="oe_button_box" name="button_box"/>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <field name="avatar_128" invisible="1"/>
+                    <field name="image_1920" widget="image" class="oe_avatar" options="{&quot;preview_image&quot;: &quot;avatar_128&quot;}"/>
+
+                    <div class="oe_title mb24">
+                        <field name="is_company" invisible="1"/>
+
+                        <field name="active" invisible="True"/>
+
+                        <field name="commercial_partner_id" invisible="1"/>
+
+                        <field name="company_id" invisible="1"/>
+                        <field name="country_code" invisible="1"/>
+                        <field name="company_type" widget="radio" options="{'horizontal': true}" invisible="1"/>
+                        <field name="user_id" invisible="1"/>
+
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Nome" required="True"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="l10n_br_legal_name" placeholder="Razão Social" attrs="{'invisible': [('is_company','=', False)]}"/>
+                            <label for="l10n_br_cnpj_cpf" string="CPF" attrs="{'invisible': [('is_company','=', True)]}">CPF</label>
+                            <label for="l10n_br_cnpj_cpf" string="CNPJ" attrs="{'invisible': [('is_company','=', False)]}">CNPJ</label>
+                            <div>
+                                <field name="l10n_br_cnpj_cpf" required="True"
+                                       widget="pattern"
+                                       options="{'pattern': '[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}-[0-9]{2}'}"
+                                       placeholder="000.000.000-00" attrs="{'invisible': [('is_company','=', True)]}"/>
+
+                                <field name="l10n_br_cnpj_cpf"
+                                       required="True"
+                                       widget="pattern"
+                                       options="{'pattern': '[0-9]{2}\\.[0-9]{3}\\.[0-9]{3}/[0-9]{4}-[0-9]{2}'}"
+                                       placeholder="00.000.000/0000-00"
+                                       attrs="{'invisible': [('is_company','=', False)]}"/>
+                            </div>
+                        </group>
+
+                        <group string="Endereço">
+                            <span class="o_form_label o_td_label" name="address_name">
+                                <field name="type" invisible="True" class="fw-bold"/>
+                            </span>
+                            <div class="o_address_format">
+                                <field name="zip" data-mask="'mask': ['99999-999']" placeholder="CEP" class="o_address_zip" />
+                                <field name="street" placeholder="Rua" class="o_address_street" />
+                                <field name="l10n_br_number" placeholder="Número" class="o_address_state" />
+                                <field name="l10n_br_district" placeholder="Bairro" class="o_address_state" />
+                                    <field name="street2" placeholder="Complemento" class="o_address_street" />
+                                    <field name="city_id" placeholder="Cidade" class="o_address_city" />
+                                    <field name="state_id" class="o_address_state" placeholder="Estado" options="{'no_open': True, 'no_quick_create': True}"/> <!--context="{'country_id': country_id, 'default_country_id': country_id}"-->
+                                    <div name="partner_address_country" class="d-flex justify-content-between">
+                                        <field name="country_id" placeholder="País" class="o_address_country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                                    </div>
+                                </div>
+                            </group>
+                        <group string="Contato">
+                            <field name="phone" widget="mask" options="{'mask': '(99) 9999-9999'}" />
+                            <field name="mobile" widget="mask" options="{'mask': '(99) 9 9999-9999'}"/>
+                            <field name="whatsapp" widget="mask" options="{'mask': '(99) 9 9999-9999'}"/>
+                            <field name="user_ids" invisible="1"/>
+                            <field name="email" widget="mask" options="{'regex': '^[a-zA-Z\\d_.+-]+@[a-zA-Z\\d\\-]+\\.[a-zA-Z\\d\\-.]+$'}"/>
+                            <field name="active" readonly="True"/>
+                        </group>
+
+                    </group>
+                    <notebook colspan="2" >
+                        <page name="internal_notes" string="Internal Notes" >
+                            <field name="comment" placeholder="Observações"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                  <field name="message_ids" readonly="True"/>
+                </div>
+            </form>
+
+        </field>
+    </record>
+    <record id="scheduler_core_res_partner_view_tree" model="ir.ui.view">
+        <field name="name">scheduler_core.res.partner.view.tree</field>
+        <field name="model">res.partner</field>
+        <field name="priority" eval="0"/>
+        <field name="arch" type="xml">
+            <tree string="Clientes">
+                <field name="name"/>
+                <field name="l10n_br_cnpj_cpf"/>
+                <field name="city"/>
+                <field name="state_id"/>
+                <field name="country_id"/>
+                <field name="phone"/>
+                <field name="mobile"/>
+                <field name="email" />
+            </tree>
+        </field>
+    </record>
+    <record id="scheduler_core_res_partner_view_kanban" model="ir.ui.view">
+        <field name="name">scheduler_core.res.partner.view.kanban</field>
+        <field name="model">res.partner</field>
+        <field name="priority" eval="0"/>
+        <field name="arch" type="xml">
+            <kanban class="o_res_partner_kanban" sample="1">
+                <field name="id"/>
+                <field name="color"/>
+                <field name="display_name"/>
+                <field name="title"/>
+                <field name="email"/>
+                <field name="parent_id"/>
+                <field name="is_company"/>
+                <field name="function"/>
+                <field name="phone"/>
+                <field name="street"/>
+                <field name="street2"/>
+                <field name="zip"/>
+                <field name="city"/>
+                <field name="country_id"/>
+                <field name="mobile"/>
+                <field name="state_id"/>
+                <field name="category_id"/>
+                <field name="avatar_128"/>
+                <field name="type"/>
+                <field name="active"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
+                            <t t-if="!record.is_company.raw_value">
+                                <t t-set="background_image" t-value="kanban_image('res.partner', 'avatar_128', record.id.raw_value)"/>
+                                <div class="o_kanban_image_fill_left d-none d-md-block" t-attf-style="background-image:url('#{background_image}')">
+                                    <img class="o_kanban_image_inner_pic" t-if="record.parent_id.raw_value" t-att-alt="record.parent_id.value" t-att-src="kanban_image('res.partner', 'avatar_128', record.parent_id.raw_value)"/>
+                                </div>
+                                <div class="o_kanban_image d-md-none" t-attf-style="background-image: url(#{background_image})">
+                                    <img class="o_kanban_image_inner_pic" t-if="record.parent_id.raw_value" t-att-alt="record.parent_id.value" t-att-src="kanban_image('res.partner', 'avatar_128', record.parent_id.raw_value)"/>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div class="o_kanban_image_fill_left o_kanban_image_full" t-attf-style="background-image: url(#{kanban_image('res.partner', 'avatar_128', record.id.raw_value)})" role="img"/>
+                            </t>
+                            <div class="ribbon ribbon-top-right" attrs="{'invisible': [('active', '=', True)]}">
+                                <span class="bg-danger">Archived</span>
+                            </div>
+                            <div class="oe_kanban_details d-flex flex-column justify-content-between">
+                                <div>
+                                    <strong class="o_kanban_record_title oe_partner_heading"><field name="display_name" invisible="1"/></strong>
+                                    <strong class="o_kanban_record_title oe_partner_heading"><field name="translated_display_name"/></strong>
+                                    <div class="o_kanban_tags_section oe_kanban_partner_categories"/>
+                                    <ul>
+                                        <li t-if="record.parent_id.raw_value and !record.function.raw_value"><field name="parent_id"/></li>
+                                        <li t-elif="!record.parent_id.raw_value and record.function.raw_value"><field name="function"/></li>
+                                        <li t-elif="record.parent_id.raw_value and record.function.raw_value"><field name="function"/> at <field name="parent_id"/></li>
+                                        <li t-if="record.city.raw_value or record.country_id.raw_value">
+                                            <t t-if="record.city.raw_value"><field name="city"/><t t-if="record.country_id.raw_value">, </t></t>
+                                            <t t-if="record.country_id.raw_value"><field name="country_id"/></t>
+                                        </li>
+                                        <li t-if="record.email.raw_value" class="o_text_overflow"><field name="email"/></li>
+                                    </ul>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left"/>
+                                    <div class="oe_kanban_bottom_right"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+   <record id="scheduler_core_res_partner_complete_cadastro_action" model="ir.actions.act_window">
+        <field name="name">Complete seu Cadastro</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="context">{'is_company':True,'create':False}</field>
+    </record>
+
+    <record id="scheduler_core_res_partner_cliente_action" model="ir.actions.act_window">
+        <field name="name">Cliente</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('is_company','=',False),
+                              ('tipo','=','CLIENTE')
+                              ]</field>
+        <field name="context">{'is_company':False,'tipo':'CLIENTE'}</field>
+    </record>
+
+    <record id="scheduler_core_res_partner_cliente_action_view_kanban" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="scheduler_core_res_partner_view_kanban"/>
+        <field name="act_window_id" ref="scheduler_core_res_partner_cliente_action"/>
+    </record>
+
+    <record id="scheduler_core_res_partner_cliente_action_view_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="scheduler_core_res_partner_view_tree"/>
+        <field name="act_window_id" ref="scheduler_core_res_partner_cliente_action"/>
+    </record>
+
+    <record id="scheduler_core_res_partner_cliente_action_view_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="scheduler_core_res_partner_view_form"/>
+        <field name="act_window_id" ref="scheduler_core_res_partner_cliente_action"/>
+    </record>
+
+    <record id="scheduler_core_res_partner_responsavel_action" model="ir.actions.act_window">
+      <field name="name">Responsavel Estação</field>
+      <field name="res_model">res.partner</field>
+      <field name="view_mode">kanban,tree,form</field>
+      <field name="domain">[('is_company', '=', False),
+        ('tipo', '=', 'RESPONSAVEL')
+        ]
+      </field>
+      <field name="context">{'is_company': False, 'tipo': 'RESPONSAVEL'}</field>
+    </record>
+
+</odoo>

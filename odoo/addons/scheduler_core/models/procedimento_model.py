@@ -7,4 +7,5 @@ class Procedimento(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(_('Nome'), required=True)
-    valor = fields.Float(string='Valor', required=True, currency_field="moeda_id")
+    valor = fields.Float(string='Valor', required=True)
+    duracao_minutos = fields.Integer(string='Duracao em Minutos', required=True)

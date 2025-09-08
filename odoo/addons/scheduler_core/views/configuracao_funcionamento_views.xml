@@ -146,12 +146,12 @@
                             <div class="o_kanban_record_body">
                                 <div class="row">
                                     <div class="col-12">
-                                        <i class="fa fa-calendar-o"/> <field name="dias_funcionamento_display"/>
+                                        <i class="fa fa-calendar-o" title="Dias de Funcionamento"/> <field name="dias_funcionamento_display"/>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
-                                        <i class="fa fa-clock-o"/>
+                                        <i class="fa fa-clock-o" title="Horário de Funcionamento"/>
                                         <field name="horario_inicio_display"/> às <field name="horario_fim_display"/>
                                     </div>
                                 </div>

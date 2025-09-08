@@ -7,6 +7,7 @@
       <tree>
         <field name="name"/>
         <field name="valor"/>
+        <field name="duracao_minutos"/>
       </tree>
     </field>
   </record>
@@ -21,8 +22,12 @@
           <group>
             <field name="name"/>
             <field name="valor"/>
+            <field name="duracao_minutos"/>
           </group>
         </sheet>
+        <div class="oe_chatter" groups="base.group_system">
+          <field name="message_ids" readonly="True"/>
+        </div>
       </form>
     </field>
   </record>
