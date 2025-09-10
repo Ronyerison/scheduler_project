@@ -39,8 +39,8 @@
                             <field name="name" placeholder="Nome" required="True"/>
                         </h1>
                         <group>
-                            <field name="tipo" readonly="1"/>
-                            <field name="is_company" string="É Pessoa Juridica?" attrs="{'invisible': [('tipo', '=', 'RESPONSAVEL')]}"/>
+                            <field name="tipo" invisible="1"/>
+                            <field name="is_company" string="É Pessoa Juridica?" attrs="{'invisible': [('tipo','=', 'RESPONSAVEL_ESTACAO')]}"/>
                         </group>
                     </div>
 
@@ -64,7 +64,7 @@
                             </div>
                         </group>
 
-                        <group string="Endereço" attrs="{'invisible': [('tipo', '=', 'RESPONSAVEL')]}">
+                        <group string="Endereço" attrs="{'invisible': [('tipo','=', 'RESPONSAVEL_ESTACAO')]}">
                             <span class="o_form_label o_td_label" name="address_name">
                                 <field name="type" invisible="True" class="fw-bold"/>
                             </span>
@@ -81,7 +81,7 @@
                                     </div>
                                 </div>
                             </group>
-                        <group string="Contato" attrs="{'invisible': [('tipo', '=', 'RESPONSAVEL')]}">
+                        <group string="Contato">
                             <field name="phone" widget="mask" options="{'mask': '(99) 9999-9999'}" />
                             <field name="mobile" widget="mask" options="{'mask': '(99) 9 9999-9999'}"/>
                             <field name="whatsapp" widget="mask" options="{'mask': '(99) 9 9999-9999'}"/>
@@ -233,8 +233,8 @@
       <field name="name">Responsavel Estação</field>
       <field name="res_model">res.partner</field>
       <field name="view_mode">kanban,tree,form</field>
-      <field name="domain">[]</field>
-      <field name="context">{'is_company': False, 'default_tipo': 'RESPONSAVEL'}</field>
+      <field name="domain">[('tipo','=','RESPONSAVEL_ESTACAO')]</field>
+      <field name="context">{'default_is_company': False, 'default_tipo': 'RESPONSAVEL_ESTACAO'}</field>
     </record>
 
 </odoo>

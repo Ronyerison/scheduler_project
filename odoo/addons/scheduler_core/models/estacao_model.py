@@ -10,5 +10,5 @@ class EstacaoModel(models.Model):
     name = fields.Char(string='Nome', required=True)
     active = fields.Boolean(string='Ativo', default=True)
     situacao = fields.Selection([(item.value, item.display_name) for item in SituacaoEstacaoEnum], _("Situação"), tracking=True, default=SituacaoEstacaoEnum.DISPONIVEL.value)
-    configuracao_funcionamento_id = fields.Many2one('scheduler_core.configuracao_funcionamento', "Configuração Funcionamento", required=True)
-    responsavel_id = fields.Many2one('res.partner', string='Responsavel', required=False, domain=[('tipo', '=', TipoResPartnerEnum.RESPONSAVEL_ESTACAO)])
+    configuracao_funcionamento_id = fields.Many2one('scheduler_core.configuracao_funcionamento', "Configuração Funcionamento", required=False)
+    responsavel_id = fields.Many2one('res.partner', string='Responsavel', required=False, domain=[('tipo', '=', TipoResPartnerEnum.RESPONSAVEL_ESTACAO.value)])

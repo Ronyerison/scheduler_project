@@ -27,8 +27,8 @@
             <group>
               <field name="name"/>
               <field name="active" widget="boolean_toggle"/>
-              <field name="configuracao_funcionamento_id"/>
-              <field name="responsavel_id"/>
+              <field name="configuracao_funcionamento_id" options="{ 'no_create': True}"/>
+              <field name="responsavel_id" options="{ 'no_create': True}"/>
             </group>
           </group>
         </sheet>
