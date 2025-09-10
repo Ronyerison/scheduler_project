@@ -20,6 +20,12 @@
         'views/agendamento_views.xml',
         'views/menu.xml',
     ],
+    "assets": {
+        "web.assets_backend": [
+            "/scheduler_core/static/lib/inputmask/inputmask.min.js",
+            "/scheduler_core/static/src/js/field_mask.js",
+        ],
+    },
     'installable': True,
     'application': True,
 }

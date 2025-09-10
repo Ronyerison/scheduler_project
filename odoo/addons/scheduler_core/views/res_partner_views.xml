@@ -17,15 +17,13 @@
                   A partner with the same <span><span class="o_vat_label">Company Registry</span></span> already exists (<field name="same_company_registry_partner_id"/>), are you sure to create a new one?
                 </div>
                 <sheet>
-                    <field name="tipo" context="{'tipo': 'CLIENTE'}" invisible="1"/>
+
                     <div class="oe_button_box" name="button_box"/>
                     <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
                     <field name="avatar_128" invisible="1"/>
                     <field name="image_1920" widget="image" class="oe_avatar" options="{&quot;preview_image&quot;: &quot;avatar_128&quot;}"/>
 
                     <div class="oe_title mb24">
-                        <field name="is_company" invisible="1"/>
-
                         <field name="active" invisible="True"/>
 
                         <field name="commercial_partner_id" invisible="1"/>
@@ -40,6 +38,10 @@
                         <h1>
                             <field name="name" placeholder="Nome" required="True"/>
                         </h1>
+                        <group>
+                            <field name="tipo" readonly="1"/>
+                            <field name="is_company" string="É Pessoa Juridica?" attrs="{'invisible': [('tipo', '=', 'RESPONSAVEL')]}"/>
+                        </group>
                     </div>
 
                     <group>
@@ -49,20 +51,20 @@
                             <label for="l10n_br_cnpj_cpf" string="CNPJ" attrs="{'invisible': [('is_company','=', False)]}">CNPJ</label>
                             <div>
                                 <field name="l10n_br_cnpj_cpf" required="True"
-                                       widget="pattern"
-                                       options="{'pattern': '[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}-[0-9]{2}'}"
+                                       widget="mask"
+                                       data-mask="999.999.999-99"
                                        placeholder="000.000.000-00" attrs="{'invisible': [('is_company','=', True)]}"/>
 
                                 <field name="l10n_br_cnpj_cpf"
                                        required="True"
-                                       widget="pattern"
-                                       options="{'pattern': '[0-9]{2}\\.[0-9]{3}\\.[0-9]{3}/[0-9]{4}-[0-9]{2}'}"
+                                       widget="mask"
+                                       data-mask="00.000.000/0000-00"
                                        placeholder="00.000.000/0000-00"
                                        attrs="{'invisible': [('is_company','=', False)]}"/>
                             </div>
                         </group>
 
-                        <group string="Endereço">
+                        <group string="Endereço" attrs="{'invisible': [('tipo', '=', 'RESPONSAVEL')]}">
                             <span class="o_form_label o_td_label" name="address_name">
                                 <field name="type" invisible="True" class="fw-bold"/>
                             </span>
@@ -79,7 +81,7 @@
                                     </div>
                                 </div>
                             </group>
-                        <group string="Contato">
+                        <group string="Contato" attrs="{'invisible': [('tipo', '=', 'RESPONSAVEL')]}">
                             <field name="phone" widget="mask" options="{'mask': '(99) 9999-9999'}" />
                             <field name="mobile" widget="mask" options="{'mask': '(99) 9 9999-9999'}"/>
                             <field name="whatsapp" widget="mask" options="{'mask': '(99) 9 9999-9999'}"/>
@@ -202,10 +204,8 @@
         <field name="name">Cliente</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">kanban,tree,form</field>
-        <field name="domain">[('is_company','=',False),
-                              ('tipo','=','CLIENTE')
-                              ]</field>
-        <field name="context">{'is_company':False,'tipo':'CLIENTE'}</field>
+        <field name="domain">[('tipo','=','CLIENTE')]</field>
+        <field name="context">{'default_tipo':'CLIENTE'}</field>
     </record>
 
     <record id="scheduler_core_res_partner_cliente_action_view_kanban" model="ir.actions.act_window.view">
@@ -233,11 +233,8 @@
       <field name="name">Responsavel Estação</field>
       <field name="res_model">res.partner</field>
       <field name="view_mode">kanban,tree,form</field>
-      <field name="domain">[('is_company', '=', False),
-        ('tipo', '=', 'RESPONSAVEL')
-        ]
-      </field>
-      <field name="context">{'is_company': False, 'tipo': 'RESPONSAVEL'}</field>
+      <field name="domain">[]</field>
+      <field name="context">{'is_company': False, 'default_tipo': 'RESPONSAVEL'}</field>
     </record>
 
 </odoo>

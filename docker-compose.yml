@@ -23,13 +23,13 @@ services:
       - db
     ports:
       - "8069:8069"
-      - "44785:44785"  # Porta para debug remoto
-      - "5678:5678"    # Porta alternativa para debug (caso necessário)
+      - "8072:8072"
     volumes:
       - ./odoo/addons:/mnt/extra-addons
       - ./odoo/config/odoo.conf:/etc/odoo/odoo.conf
       - ./odoo/entrypoint.sh:/entrypoint.sh
       - ./odoo/data:/var/lib/odoo
+      - .:/mnt/scheduler_project:rw
     entrypoint: ["/entrypoint.sh"]
     environment:
       - HOST=db
