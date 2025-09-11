@@ -17,21 +17,21 @@
                   parent="menu_cadastros"
                   action="scheduler_core_res_partner_cliente_action" />
 
-        <menuitem id="menu_action_estacao"
+        <menuitem id="menu_action_recurso"
                   sequence="2"
-                  name="Estação"
+                  name="Recursos"
                   parent="menu_cadastros"
-                  action="scheduler_core_estacao_action" />
+                  action="scheduler_core_recurso_action" />
 
         <menuitem id="menu_action_procedimento"
                   sequence="3"
-                  name="Procedimento"
+                  name="Procedimentos"
                   parent="menu_cadastros"
                   action="scheduler_core_procedimento_action" />
 
         <menuitem id="menu_action_responsavel"
                   sequence="4"
-                  name="Responsavel Estação"
+                  name="Responsaveis Atendimento"
                   parent="menu_cadastros"
                   action="scheduler_core_res_partner_responsavel_action" />
 

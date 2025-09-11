@@ -40,7 +40,7 @@
                         </h1>
                         <group>
                             <field name="tipo" invisible="1"/>
-                            <field name="is_company" string="É Pessoa Juridica?" attrs="{'invisible': [('tipo','=', 'RESPONSAVEL_ESTACAO')]}"/>
+                            <field name="is_company" string="É Pessoa Juridica?" attrs="{'invisible': [('tipo','=', 'RESPONSAVEL_RECURSO')]}"/>
                         </group>
                     </div>
 
@@ -64,7 +64,7 @@
                             </div>
                         </group>
 
-                        <group string="Endereço" attrs="{'invisible': [('tipo','=', 'RESPONSAVEL_ESTACAO')]}">
+                        <group string="Endereço" attrs="{'invisible': [('tipo','=', 'RESPONSAVEL_RECURSO')]}">
                             <span class="o_form_label o_td_label" name="address_name">
                                 <field name="type" invisible="True" class="fw-bold"/>
                             </span>
@@ -92,8 +92,18 @@
 
                     </group>
                     <notebook colspan="2" >
-                        <page name="internal_notes" string="Internal Notes" >
-                            <field name="comment" placeholder="Observações"/>
+                        <page name="agendamentos" string="Histórico de Agendamentos" >
+                            <group colspan="6">
+                              <field name="agendamento_ids" string="">
+                                <tree>
+                                    <field name="data_hora_agendamento"/>
+                                    <field name="recurso_id"/>
+                                    <field name="status"/>
+                                    <field name="valor_pago"/>
+                                    <field name="valor_final"/>
+                                </tree>
+                              </field>
+                            </group>
                         </page>
                     </notebook>
                 </sheet>
@@ -230,11 +240,11 @@
     </record>
 
     <record id="scheduler_core_res_partner_responsavel_action" model="ir.actions.act_window">
-      <field name="name">Responsavel Estação</field>
+      <field name="name">Responsavel Recurso</field>
       <field name="res_model">res.partner</field>
       <field name="view_mode">kanban,tree,form</field>
-      <field name="domain">[('tipo','=','RESPONSAVEL_ESTACAO')]</field>
-      <field name="context">{'default_is_company': False, 'default_tipo': 'RESPONSAVEL_ESTACAO'}</field>
+      <field name="domain">[('tipo','=','RESPONSAVEL_RECURSO')]</field>
+      <field name="context">{'default_is_company': False, 'default_tipo': 'RESPONSAVEL_RECURSO'}</field>
     </record>
 
 </odoo>

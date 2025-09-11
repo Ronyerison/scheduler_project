@@ -1,33 +1,31 @@
 <odoo>
-  <record id="scheduler_core_estacao_view_tree" model="ir.ui.view">
-    <field name="name">scheduler_core.estacao.view.tree</field>
-    <field name="model">scheduler_core.estacao</field>
+  <record id="scheduler_core_recurso_view_tree" model="ir.ui.view">
+    <field name="name">scheduler_core.recurso.view.tree</field>
+    <field name="model">scheduler_core.recurso</field>
     <field name="type">tree</field>
     <field name="arch" type="xml">
       <tree>
         <field name="name"/>
         <field name="configuracao_funcionamento_id"/>
         <field name="responsavel_id"/>
-        <field name="situacao"/>
       </tree>
     </field>
   </record>
 
-  <record id="scheduler_core_estacao_view_form" model="ir.ui.view">
-    <field name="name">scheduler_core.estacao.view.form</field>
-    <field name="model">scheduler_core.estacao</field>
+  <record id="scheduler_core_recurso_view_form" model="ir.ui.view">
+    <field name="name">scheduler_core.recurso.view.form</field>
+    <field name="model">scheduler_core.recurso</field>
     <field name="type">form</field>
     <field name="arch" type="xml">
       <form>
         <header>
-          <field name="situacao" widget="statusbar"/>
         </header>
         <sheet>
           <group>
             <group>
               <field name="name"/>
               <field name="active" widget="boolean_toggle"/>
-              <field name="configuracao_funcionamento_id" options="{ 'no_create': True}"/>
+              <field name="configuracao_funcionamento_id" Roptions="{ 'no_create': True}"/>
               <field name="responsavel_id" options="{ 'no_create': True}"/>
             </group>
           </group>
@@ -39,9 +37,9 @@
     </field>
   </record>
 
-  <record id="scheduler_core_estacao_action" model="ir.actions.act_window">
-    <field name="name">Estação</field>
-    <field name="res_model">scheduler_core.estacao</field>
+  <record id="scheduler_core_recurso_action" model="ir.actions.act_window">
+    <field name="name">Recurso</field>
+    <field name="res_model">scheduler_core.recurso</field>
     <field name="view_mode">tree,form</field>
     <field name="domain">[]</field>
     <field name="context">{}</field>

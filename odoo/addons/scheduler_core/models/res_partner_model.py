@@ -21,3 +21,5 @@ class ResPartner(models.Model):
     zip = fields.Char(string="CEP")
     whatsapp = fields.Char(string="WhatsApp")
 
+    agendamento_ids = fields.One2many('scheduler_core.agendamento', 'cliente_id', string="Histórico de Agendamentos")
+
