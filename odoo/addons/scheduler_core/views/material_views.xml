@@ -1,0 +1,41 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="view_material_tree" model="ir.ui.view">
+        <field name="name">scheduler_core.material.tree</field>
+        <field name="model">scheduler_core.material</field>
+        <field name="arch" type="xml">
+            <tree string="Materiais">
+                <field name="name"/>
+                <field name="unidade_id"/>
+                <field name="valor_unitario"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_material_form" model="ir.ui.view">
+        <field name="name">scheduler_core.material.form</field>
+        <field name="model">scheduler_core.material</field>
+        <field name="arch" type="xml">
+            <form string="Material">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="unidade_id"/>
+                        <field name="valor_unitario"/>
+                        <field name="observacao"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_material" model="ir.actions.act_window">
+        <field name="name">Materiais</field>
+        <field name="res_model">scheduler_core.material</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+</odoo>

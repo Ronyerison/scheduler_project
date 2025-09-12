@@ -19,9 +19,6 @@ class Agendamento(models.Model):
     cliente_id = fields.Many2one('res.partner', string='Cliente', tracking=True, required=True, domain=[('tipo', '=', TipoResPartnerEnum.CLIENTE.value)])
     procedimento_ids = fields.Many2many('scheduler_core.procedimento', 'agendamento_procedimento_rel', 'agendamento_id', 'procedimento_id', string='Procedimentos', tracking=True)
     valor_total = fields.Float(string='Valor Total', compute='_compute_valor_total', tracking=True, store=True)
-    valor_pago = fields.Float(string='Valor Pago', tracking=True)
-    valor_desconto = fields.Float(string='Desconto', tracking=True)
-    valor_final = fields.Float(string='Valor Final', tracking=True, compute='_compute_valor_final', store=True, readonly=True)
     status = fields.Selection([(item.value, item.display_name) for item in SituacaoAgendamentoEnum], _("Status"), tracking=True, default=SituacaoAgendamentoEnum.AGENDADO.value)
     is_recurring = fields.Boolean(string="Recorrente")
     descricao_procedimentos = fields.Char(string="Descrição de Serviços", tracking=True)
@@ -41,6 +38,7 @@ class Agendamento(models.Model):
         string="Número de ocorrências",
         default=5
     )
+    ordem_servico_ids = fields.One2many("scheduler_core.ordem_servico", "agendamento_id", string="Ordens de Serviço")
 
     @api.onchange('data_hora_agendamento', 'procedimento_ids')
     def _onchange_datas(self):
@@ -65,11 +63,6 @@ class Agendamento(models.Model):
     def _compute_valor_total(self):
         for record in self:
             record.valor_total = sum(record.procedimento_ids.mapped('valor')) if record.procedimento_ids else 0.0
-
-    @api.depends('valor_pago', 'valor_total')
-    def _compute_valor_final(self):
-        for record in self:
-            record.valor_final = record.valor_pago + (record.valor_desconto or 0.0)
 
     @api.model
     def _read_group_recurso_id(self, stages, domain, order):
@@ -112,3 +105,22 @@ class Agendamento(models.Model):
             if record.procedimento_ids:
                 descricoes = ", ".join(record.procedimento_ids.mapped('name'))
                 record.descricao_procedimentos = descricoes
+
+    def action_confirmar(self):
+        for rec in self:
+            rec.status = "CONFIRMADO"
+
+    def action_gerar_os(self):
+        self.ensure_one()
+        if self.status != "CONFIRMADO":
+            raise UserError("O agendamento deve estar CONFIRMADO antes de gerar a OS.")
+
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "wizard.gerar.os",
+            "view_mode": "form",
+            "target": "new",
+            "context": {
+                "default_agendamento_id": self.id,
+            },
+        }

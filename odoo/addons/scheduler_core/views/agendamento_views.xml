@@ -5,14 +5,12 @@
         <field name="name">scheduler_core.agendamento.tree</field>
         <field name="model">scheduler_core.agendamento</field>
         <field name="arch" type="xml">
-            <tree string="Agendamentos" decoration-bf="valor_desconto != 0" decoration-muted="valor_pago == 0">
+            <tree string="Agendamentos">
                 <field name="data_hora_agendamento"/>
                 <field name="cliente_id"/>
                 <field name="recurso_id"/>
                 <field name="responsavel_id"/>
                 <field name="valor_total" sum="Total Geral"/>
-                <field name="valor_pago" sum="Total Pago"/>
-                <field name="valor_desconto" sum="Total Desconto"/>
             </tree>
         </field>
     </record>
@@ -23,6 +21,21 @@
         <field name="model">scheduler_core.agendamento</field>
         <field name="arch" type="xml">
             <form string="Agendamento">
+                <header>
+                    <button name="action_confirmar"
+                            string="Confirmar"
+                            type="object"
+                            class="btn-primary"
+                            attrs="{'invisible': [('status', '!=', 'AGENDADO')]}"/>
+
+                    <button name="action_gerar_os"
+                            string="Gerar OS"
+                            type="object"
+                            class="btn-secondary"
+                            attrs="{'invisible': [('status', '!=', 'CONFIRMADO')]}"/>
+
+                    <field name="status" widget="statusbar"/>
+                </header>
                 <sheet>
                     <div class="oe_title">
                         <h1>
@@ -32,19 +45,18 @@
                     </div>
 
                     <group>
-                        <group name="info_basica" string="Informações do Agendamento">
+                        <group name="datas" string="Datas">
                             <field name="data_hora_agendamento" widget="datetime" string="Data/Hora Inicio"/>
                             <field name="data_hora_fim" widget="datetime" string="Data/Hora Término"/>
+
+                        </group>
+
+                        <group name="info_basica" string="Informações do Agendamento">
                             <field name="cliente_id" options="{'no_create': False, 'no_create_edit': True}"/>
                             <field name="recurso_id" options="{'no_create': True, 'no_create_edit': True}"/>
                             <field name="responsavel_id" readonly="1"/>
-                        </group>
-
-                        <group name="valores" string="Valores">
                             <field name="valor_total"
                                    attrs="{'readonly': [('procedimento_ids', '!=', [])]}"/>
-                            <field name="valor_pago"/>
-                            <field name="valor_desconto" readonly="1"/>
                         </group>
 
                         <group string="Recorrência" name="recurrence">
@@ -66,6 +78,17 @@
                                     <field name="name"/>
                                     <field name="duracao_minutos"/>
                                     <field name="valor" sum="Total"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Ordens de Serviço">
+                            <field name="ordem_servico_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="status"/>
+                                    <field name="data_inicio"/>
+                                    <field name="data_fim"/>
+                                    <field name="responsavel_execucao_id"/>
                                 </tree>
                             </field>
                         </page>
@@ -113,8 +136,6 @@
                 <field name="recurso_id"/>
                 <field name="responsavel_id"/>
                 <field name="valor_total"/>
-                <field name="valor_pago"/>
-                <field name="valor_desconto"/>
                 <field name="status"/>
                 <field name="descricao_procedimentos"/>
                 <templates>
@@ -201,14 +222,6 @@
                         domain="[('data_hora_agendamento', '&gt;=', (context_today() - datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]"/>
 
                 <separator/>
-                <filter name="nao_pago" string="Não Pago"
-                        domain="[('valor_pago', '=', 0)]"/>
-                <filter name="parcialmente_pago" string="Parcialmente Pago"
-                        domain="[('valor_pago', '&gt;', 0), ('valor_pago', '&lt;', 'valor_total')]"/>
-                <filter name="totalmente_pago" string="Totalmente Pago"
-                        domain="[('valor_pago', '&gt;=', 'valor_total')]"/>
-                <filter name="com_desconto" string="Com Desconto"
-                        domain="[('valor_desconto', '&gt;', 0)]"/>
 
                 <group expand="0" string="Agrupar Por">
                     <filter name="group_by_recurso" string="Estação"
@@ -226,38 +239,12 @@
         </field>
     </record>
 
-    <!-- Pivot View -->
-    <record id="agendamento_pivot_view" model="ir.ui.view">
-        <field name="name">agendamento.pivot</field>
-        <field name="model">scheduler_core.agendamento</field>
-        <field name="arch" type="xml">
-            <pivot string="Análise de Agendamentos">
-                <field name="recurso_id" type="row"/>
-                <field name="data_hora_agendamento" interval="month" type="col"/>
-                <field name="valor_total" type="measure"/>
-                <field name="valor_pago" type="measure"/>
-                <field name="valor_desconto" type="measure"/>
-            </pivot>
-        </field>
-    </record>
-
-    <!-- Graph View -->
-    <record id="agendamento_graph_view" model="ir.ui.view">
-        <field name="name">agendamento.graph</field>
-        <field name="model">scheduler_core.agendamento</field>
-        <field name="arch" type="xml">
-            <graph string="Gráfico de Agendamentos" type="line">
-                <field name="data_hora_agendamento" interval="day"/>
-                <field name="valor_total" type="measure"/>
-            </graph>
-        </field>
-    </record>
 
     <!-- Action -->
     <record id="scheduler_core_agendamento_action" model="ir.actions.act_window">
         <field name="name">Agendamentos</field>
         <field name="res_model">scheduler_core.agendamento</field>
-        <field name="view_mode">kanban,calendar,tree,form,pivot,graph</field>
+        <field name="view_mode">kanban,calendar,tree,form</field>
         <field name="context">{
             'search_default_esta_semana': 1,
             'search_default_group_by_recurso': 1

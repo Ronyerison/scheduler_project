@@ -2,10 +2,20 @@
     <menuitem id="base.menu_management"
               groups="base.group_system" />
 
-    <menuitem id="manu_agendamento"
+    <menuitem id="menu_servicos"
               sequence="1"
-              name="Agendamentos"
-              action="scheduler_core_agendamento_action"/>
+              name="Serviços" />
+
+        <menuitem id="manu_agendamento"
+                  sequence="1"
+                  name="Agendamentos"
+                  parent="menu_servicos"
+                  action="scheduler_core_agendamento_action"/>
+
+        <menuitem id="menu_ordem_servico_root"
+                  name="Ordens de Serviço"
+                  parent="menu_servicos"
+                  action="action_ordem_servico"/>
 
     <menuitem id="menu_cadastros"
               sequence="2"
@@ -34,6 +44,12 @@
                   name="Responsaveis Atendimento"
                   parent="menu_cadastros"
                   action="scheduler_core_res_partner_responsavel_action" />
+
+        <menuitem id="menu_material_action"
+                  name="Materiais"
+                  parent="menu_cadastros"
+                  action="action_material"
+                  sequence="5"/>
 
     <menuitem id="menu_configuracoes"
               sequence="3"

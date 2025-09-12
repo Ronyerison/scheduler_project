@@ -1,0 +1,9 @@
+<odoo>
+    <record id="seq_ordem_servico" model="ir.sequence">
+        <field name="name">Ordem de Serviço</field>
+        <field name="code">ordem.servico</field>
+        <field name="prefix">OS</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

@@ -1,0 +1,111 @@
+<odoo>
+    <record id="view_ordem_servico_form" model="ir.ui.view">
+        <field name="name">scheduler_core.ordem_servico.form</field>
+        <field name="model">scheduler_core.ordem_servico</field>
+        <field name="arch" type="xml">
+            <form string="Ordem de Serviço">
+                <header>
+                    <button name="action_finalizar"
+                            string="Finalizar"
+                            type="object"
+                            class="btn-success"
+                            attrs="{'invisible': [('status', '!=', 'EM_EXECUCAO')]}"/>
+
+                    <field name="status" widget="statusbar"
+                           statusbar_visible="PENDENTE,EM_EXECUCAO,FINALIZADA,CANCELADA"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <group name="info" string="Informações Básicas">
+                            <field name="name" readonly="1"/>
+                            <field name="agendamento_id" readonly="1"/>
+                            <field name="recurso_id" readonly="1"/>
+                            <field name="responsavel_execucao_id"/>
+
+                        </group>
+                        <group name="valores" string="Valores">
+                            <field name="valor_total" />
+                            <field name="valor_pago" />
+                            <field name="valor_desconto" />
+                            <field name="valor_final" readonly="1"/>
+                        </group>
+                        <group name="execucao" string="Informações de Execução">
+                            <field name="data_inicio"/>
+                            <field name="data_fim"/>
+                            <field name="descricao_execucao"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="procedimentos" string="Procedimentos">
+                            <field name="procedimento_ids"
+                                   options="{'no_create': True, 'no_create_edit': True}">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="duracao_minutos"/>
+                                    <field name="valor" sum="Total"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Materiais Utilizados">
+                            <field name="material_ids">
+                                <tree editable="bottom">
+                                    <field name="material_id"/>
+                                    <field name="unidade_id"/>
+                                    <field name="valor_unitario"/>
+                                    <field name="quantidade"/>
+                                    <field name="valor_total" sum="Total"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_ordem_servico_tree" model="ir.ui.view">
+        <field name="name">scheduler_core.ordem_servico.tree</field>
+        <field name="model">scheduler_core.ordem_servico</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="agendamento_id"/>
+                <field name="cliente_id"/>
+                <field name="recurso_id"/>
+                <field name="responsavel_execucao_id"/>
+                <field name="status"/>
+                <field name="data_inicio"/>
+                <field name="data_fim"/>
+                <field name="valor_total" sum="Total Geral"/>
+                <field name="valor_pago" sum="Total Pago"/>
+                <field name="valor_desconto" sum="Total Desconto"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_ordem_servico_search" model="ir.ui.view">
+       <field name="name">scheduler_core.ordem_servico.search</field>
+       <field name="model">scheduler_core.ordem_servico</field>
+        <field name="arch" type="xml">
+            <search string="">
+
+                <filter name="nao_pago" string="Não Pago"
+                        domain="[('valor_pago', '=', 0)]"/>
+                <filter name="parcialmente_pago" string="Parcialmente Pago"
+                        domain="[('valor_pago', '&gt;', 0), ('valor_pago', '&lt;', 'valor_total')]"/>
+                <filter name="totalmente_pago" string="Totalmente Pago"
+                        domain="[('valor_pago', '&gt;=', 'valor_total')]"/>
+                <filter name="com_desconto" string="Com Desconto"
+                        domain="[('valor_desconto', '&gt;', 0)]"/>
+
+            </search>
+       </field>
+    </record>
+
+    <record id="action_ordem_servico" model="ir.actions.act_window">
+        <field name="name">Ordens de Serviço</field>
+        <field name="res_model">scheduler_core.ordem_servico</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

@@ -94,13 +94,13 @@
                     <notebook colspan="2" >
                         <page name="agendamentos" string="Histórico de Agendamentos" >
                             <group colspan="6">
-                              <field name="agendamento_ids" string="">
+                              <field name="agendamento_ids" string="" readonly="1">
                                 <tree>
                                     <field name="data_hora_agendamento"/>
                                     <field name="recurso_id"/>
                                     <field name="status"/>
-                                    <field name="valor_pago"/>
-                                    <field name="valor_final"/>
+                                    <field name="valor_total"/>
+                                    <field name="procedimento_ids" widget="many2many_tags"/>
                                 </tree>
                               </field>
                             </group>
