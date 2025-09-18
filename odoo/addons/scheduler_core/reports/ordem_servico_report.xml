@@ -1,0 +1,13 @@
+<odoo>
+  <record id="ordem_servico_report" model="ir.actions.report">
+    <field name="name">Ordem de Serviço / Orçamento</field>
+    <field name="model">scheduler_core.ordem_servico</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">scheduler_core.ordem_servico_template</field>
+    <field name="report_file">scheduler_core.ordem_servico_template</field>
+    <field name="binding_model_id" eval="False"/>
+    <field name="binding_type">report</field>
+    <field name="print_report_name">self.name</field>
+    <field name="paperformat_id" ref="scheduler_core.configuracao_folha_impressao_a4"/>
+  </record>
+</odoo>

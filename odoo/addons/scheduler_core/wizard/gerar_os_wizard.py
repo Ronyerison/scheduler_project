@@ -19,15 +19,18 @@ class WizardGerarOS(models.TransientModel):
     )
     data_inicio = fields.Datetime(string="Data de Início", default=fields.Datetime.now, required=True)
     descricao_execucao = fields.Text(string="Descrição da Execução")
-    materiais_utilizados = fields.Text(string="Materiais Utilizados")
+    material_ids = fields.One2many(
+        "wizard.gerar.os.material",
+        "wizard_id",
+        string="Materiais Utilizados"
+    )
     procedimento_ids = fields.Many2many(
         "scheduler_core.procedimento",
         string="Procedimentos",
     )
-    valor_total = fields.Float(string='Valor Total', compute='_compute_valor_total')
-    valor_pago = fields.Float(string='Valor Pago', tracking=True)
-    valor_desconto = fields.Float(string='Desconto', tracking=True)
-    valor_final = fields.Float(string='Valor Final', tracking=True, compute='_compute_valor_final')
+    valor_total = fields.Float(string='Valor Total', compute="_compute_valor_total")
+    valor_pago = fields.Float(string='Valor Pago')
+    valor_desconto = fields.Float(string='Desconto')
 
     @api.model
     def default_get(self, fields_list):
@@ -55,8 +58,14 @@ class WizardGerarOS(models.TransientModel):
             "data_inicio": self.data_inicio,
             "procedimento_ids": [(6, 0, self.procedimento_ids.ids)],
             "descricao_execucao": self.descricao_execucao,
-            "materiais_utilizados": self.materiais_utilizados,
             "status": "EM_EXECUCAO",
+            "material_ids": [
+                (0, 0, {
+                    "material_id": mat.material_id.id,
+                    "quantidade": mat.quantidade,
+                    "valor_unitario": mat.valor_unitario or (mat.material_id.valor_unitario if mat.material_id else 0.0),
+                }) for mat in self.material_ids
+            ]
         })
 
         agendamento.status = "EM_ANDAMENTO"
@@ -68,12 +77,22 @@ class WizardGerarOS(models.TransientModel):
             "target": "current",
         }
 
-    @api.depends('procedimento_ids')
+    @api.depends(
+        'procedimento_ids', 'procedimento_ids.valor',
+        'material_ids.quantidade', 'material_ids.valor_unitario', 'material_ids.material_id'
+    )
     def _compute_valor_total(self):
         for record in self:
-            record.valor_total = sum(record.procedimento_ids.mapped('valor')) if record.procedimento_ids else 0.0
+            # soma procedimentos
+            valor_total_procedimentos = 0.0
+            if record.procedimento_ids:
+                for p in record.procedimento_ids:
+                    valor_total_procedimentos += float(p.valor or 0.0)
 
-    @api.depends('valor_pago', 'valor_total')
-    def _compute_valor_final(self):
-        for record in self:
-            record.valor_final = record.valor_pago + (record.valor_desconto or 0.0)
+            # soma materiais: quantidade * valor_unitario (fallback para material.valor_unitario)
+            valor_total_materiais = 0.0
+            for m in record.material_ids:
+                unit = m.valor_unitario or (m.material_id.valor_unitario if m.material_id else 0.0)
+                valor_total_materiais += float(m.quantidade or 0.0) * float(unit or 0.0)
+
+            record.valor_total = valor_total_procedimentos + valor_total_materiais

@@ -13,6 +13,9 @@
     'data': [
         'data/ir_sequence.xml',
         'security/ir.model.access.csv',
+        'reports/configuracao_folha_impressao_a4.xml',
+        'reports/ordem_servico_template.xml',
+        'reports/ordem_servico_report.xml',
         'views/procedimento_views.xml',
         'views/configuracao_funcionamento_views.xml',
         'views/res_partner_views.xml',

@@ -1,0 +1,89 @@
+<odoo>
+    <!-- Template do relatório -->
+    <template id="ordem_servico_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="os">
+                <div class="page">
+                    <!-- Declarar charset e forçar fonte com suporte -->
+                    <meta charset="utf-8"/>
+                    <style>
+                        * {
+                            font-family: "DejaVu Sans", sans-serif !important;
+                        }
+                        table, th, td {
+                            border: 1px solid black;
+                            border-collapse: collapse;
+                            padding: 4px;
+                        }
+                        h2, h3 {
+                            font-weight: bold;
+                        }
+                    </style>
+                    <h2 style="text-align:center;">Ordem de Serviço/Orçamento</h2>
+                    <br/>
+
+                    <p><strong>Número OS:</strong> <t t-out="os.name"/></p>
+                    <p><strong>Cliente:</strong> <t t-out="os.cliente_id.name"/></p>
+                    <p><strong>Recurso:</strong> <t t-out="os.recurso_id.name"/></p>
+                    <p><strong>Responsável Execução:</strong> <t t-out="os.responsavel_execucao_id.name"/></p>
+                    <p><strong>Status:</strong> <t t-out="os._fields['status'].convert_to_export(os.status, os)"/></p>
+                    <p><strong>Data Início:</strong> <t t-out="os.data_inicio"/></p>
+                    <p><strong>Data Fim:</strong> <t t-out="os.data_fim"/></p>
+                    <p><strong>Observações:</strong> <t t-out="os.descricao_execucao"/></p>
+
+                    <h3>Procedimentos</h3>
+                    <table class="table table-sm table-bordered" style="width:100%; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th>Material</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="os.procedimento_ids" t-as="proc">
+                                <tr>
+                                    <td><t t-out="proc.name"/></td>
+                                    <td>
+                                        <span t-out="proc.valor" t-options="{'widget': 'monetary', 'display_currency': os.company_id.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <h3>Materiais Utilizados</h3>
+                    <table class="table table-sm table-bordered" style="width:100%; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th>Material</th>
+                                <th>Unidade</th>
+                                <th>Quantidade</th>
+                                <th>Valor Unit.</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="os.material_ids" t-as="mat">
+                                <tr>
+                                    <td><t t-out="mat.material_id.name"/></td>
+                                    <td><t t-out="mat.material_id.unidade_id.name"/></td>
+                                    <td><t t-out="mat.quantidade"/></td>
+                                    <td>
+                                        <span t-out="mat.valor_unitario" t-options="{'widget': 'monetary', 'display_currency': os.company_id.currency_id}"/>
+                                    </td>
+                                    <td>
+                                        <span t-out="mat.quantidade * mat.valor_unitario" t-options="{'widget': 'monetary', 'display_currency': os.company_id.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <p><strong>Valor Total:</strong> R$ <span t-out="os.valor_total" t-options="{'widget': 'monetary', 'display_currency': os.company_id.currency_id}"/></p>
+                    <p><strong>Valor Pago:</strong> R$ <span t-out="os.valor_pago" t-options="{'widget': 'monetary', 'display_currency': os.company_id.currency_id}"/></p>
+                    <p><strong>Desconto:</strong> R$ <span t-out="os.valor_desconto" t-options="{'widget': 'monetary', 'display_currency': os.company_id.currency_id}"/></p>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

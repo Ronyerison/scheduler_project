@@ -4,21 +4,52 @@
         <field name="model">wizard.gerar.os</field>
         <field name="arch" type="xml">
             <form string="Gerar Ordem de Serviço">
-                <group>
-                    <field name="agendamento_id" readonly="1"/>
-                    <field name="cliente_id" readonly="1"/>
-                    <field name="recurso_id" readonly="1"/>
-                    <field name="responsavel_execucao_id"/>
-                    <field name="data_inicio"/>
-                    <field name="descricao_execucao"/>
-                    <field name="valor_total" attrs="{'readonly': [('procedimento_ids', '!=', [])]}"/>
-                    <field name="valor_pago"/>
-                    <field name="valor_desconto" readonly="1"/>
-                    <field name="procedimento_ids" widget="many2many_tags"/>
+                <group col="3">
+                    <group>
+                        <field name="agendamento_id" readonly="1"/>
+                        <field name="cliente_id" readonly="1"/>
+                        <field name="recurso_id" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="responsavel_execucao_id"/>
+                        <field name="data_inicio"/>
+                    </group>
+                    <group>
+                        <field name="valor_total" readonly="1"/>
+                        <field name="valor_pago"/>
+                        <field name="valor_desconto"/>
+                    </group>
                 </group>
+
+                <notebook>
+                    <!-- Procedimentos -->
+                    <page string="Procedimentos">
+                        <field name="procedimento_ids" widget="many2many_tags"/>
+                    </page>
+
+                    <!-- Materiais -->
+                    <page string="Materiais Utilizados">
+                        <field name="material_ids">
+                            <tree editable="bottom">
+                                <field name="material_id"/>
+                                <field name="quantidade"/>
+                                <field name="valor_unitario" readonly="1"/>
+                                <field name="valor_total" readonly="1" sum="Total"/>
+                            </tree>
+                        </field>
+                    </page>
+
+                    <!-- Execução -->
+                    <page string="Execução">
+                        <field name="descricao_execucao" nolabel="1" placeholder="Descreva a execução do serviço..."/>
+                    </page>
+
+                </notebook>
+
                 <footer>
+                    <button string="Confirmar OS" type="object" name="action_confirmar_os"
+                            class="btn-primary"/>
                     <button string="Cancelar" class="btn-secondary" special="cancel"/>
-                    <button name="action_confirmar_os" string="Confirmar OS" type="object" class="btn-primary"/>
                 </footer>
             </form>
         </field>

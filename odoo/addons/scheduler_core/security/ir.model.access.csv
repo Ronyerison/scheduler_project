@@ -1,5 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_wizard_gerar_os,wizard.gerar.os,model_wizard_gerar_os,,1,1,1,1
+access_wizard_gerar_os_material,wizard.gerar.os.material,model_wizard_gerar_os_material,,1,1,1,1
 
 scheduler_core.access_scheduler_core_recurso_admin,access_scheduler_core_recurso,scheduler_core.model_scheduler_core_recurso,base.group_system,1,1,1,1
 scheduler_core.access_scheduler_core_configuracao_funcionamento_admin,access_scheduler_core_configuracao_funcionamento,scheduler_core.model_scheduler_core_configuracao_funcionamento,base.group_system,1,1,1,1
