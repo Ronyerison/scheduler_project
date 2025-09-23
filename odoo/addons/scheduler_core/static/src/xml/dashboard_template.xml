@@ -23,7 +23,7 @@
                                 />
                                 <div>
                                     <h2 class="mb-1" t-esc="state.company.name"/>
-                                    <p class="text-muted mb-0" t-if="state.company.cnpj">
+                                    <p t-if="state.company.cnpj" class="text-muted mb-0">
                                         CNPJ: <span t-esc="state.company.cnpj"/>
                                     </p>
                                 </div>
@@ -55,9 +55,37 @@
                             >
                                 <div class="card-body text-center d-flex flex-column justify-content-center">
                                     <div class="menu-icon mb-3">
-                                        <i t-att-class="menu.icon + ' fa-3x text-primary'"></i>
+                                        <!-- Renderização condicional do ícone -->
+                                        <div t-if="menu.icon_type === 'image'" class="menu-image-container">
+                                            <img
+                                                t-att-src="menu.icon"
+                                                t-att-alt="menu.name"
+                                                class="module-icon"
+                                                style="width: 48px; height: 48px; object-fit: contain;"
+                                            />
+                                        </div>
+                                        <i t-else="" t-att-class="menu.icon + ' fa-3x text-primary'"></i>
                                     </div>
-                                    <h5 class="card-title mb-0" t-esc="menu.name"/>
+                                    <h5 class="card-title mb-2" t-esc="menu.name"/>
+
+                                    <!-- Descrição simplificada sem função -->
+                                    <small class="text-muted">
+                                        <span t-if="menu.action">Clique para acessar</span>
+                                        <span t-elif="menu.has_children">Ver submenus</span>
+                                        <span t-else="">Menu de navegação</span>
+                                    </small>
+
+                                    <!-- Badges informativos -->
+                                    <div class="mt-2">
+                                        <span t-if="menu.has_children" class="badge badge-info me-1">
+                                            <i class="fa fa-sitemap me-1"></i>
+                                            Submenus
+                                        </span>
+                                        <span t-if="menu.action" class="badge badge-success">
+                                            <i class="fa fa-external-link me-1"></i>
+                                            Ação Direta
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

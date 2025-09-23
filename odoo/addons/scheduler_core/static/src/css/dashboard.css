@@ -22,7 +22,7 @@
 .menu-card {
     transition: all 0.3s ease;
     border: 1px solid #e9ecef;
-    min-height: 150px;
+    min-height: 180px;
 }
 
 .menu-card:hover {
@@ -48,6 +48,63 @@
 
 .menu-card:hover .menu-icon i {
     transform: scale(1.1);
+}
+
+/* Ícones de imagem dos módulos */
+.menu-image-icon {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-image-container {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.module-icon {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.module-icon:not([src]), .module-icon[src=""], .module-icon[src="#"] {
+    display: none;
+}
+
+.module-icon + .module-icon-fallback {
+    display: inline-block !important;
+}
+
+.menu-card:hover .module-icon {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 0.25em 0.5em;
+    font-size: 0.75em;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+}
+
+.badge-info {
+    color: #fff;
+    background-color: #17a2b8;
+}
+
+.badge-success {
+    color: #fff;
+    background-color: #28a745;
 }
 
 .cursor-pointer {

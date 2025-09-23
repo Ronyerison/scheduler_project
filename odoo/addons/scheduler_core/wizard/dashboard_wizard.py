@@ -27,15 +27,19 @@ class SchedulerDashboard(models.TransientModel):
         # Buscar apenas menus principais, excluindo alguns menus do sistema
         menus = self.env["ir.ui.menu"].search([
             ("parent_id", "=", False),
-            ("name", "not in", ["Settings", "Configurações", "Apps", "Aplicativos"])
+            ("name", "not in", ["Dashboard"])
         ], order="sequence,name")
 
         return [
             {
                 "id": menu.id,
                 "name": menu.name,
-                "action": menu.action.id if menu.action else False,
+                "action": menu.action.id if menu.action else None,
+                "action_type": menu.action._name if menu.action else None,
+                "has_children": bool(self.env["ir.ui.menu"].search_count([("parent_id", "=", menu.id)])),
                 "icon": self._get_menu_icon(menu),
+                "icon_type": self._get_icon_type(menu.web_icon),
+                "web_icon": menu.web_icon,
             }
             for menu in menus
         ]
@@ -43,9 +47,25 @@ class SchedulerDashboard(models.TransientModel):
     def _get_menu_icon(self, menu):
         """Retorna o ícone do menu ou um padrão"""
         if menu.web_icon:
-            # Se tem ícone personalizado, usar ele
-            if menu.web_icon.startswith('fa-'):
+            # Tratar ícones do tipo 'modulo,static/description/icon.png'
+            if ',' in menu.web_icon and 'static' in menu.web_icon:
+                # Extrair o módulo e caminho
+                module_path = menu.web_icon.split(',')
+                if len(module_path) == 2:
+                    module = module_path[0]
+                    path = module_path[1]
+                    # Retornar o caminho completo para a imagem
+                    return f"/{module}/{path}"
+
+            # Se tem ícone FontAwesome
+            elif menu.web_icon.startswith('fa-'):
                 return f"fa {menu.web_icon}"
+
+            # Se é um ícone direto (caminho de imagem)
+            elif menu.web_icon.startswith('/') or menu.web_icon.startswith('http'):
+                return menu.web_icon
+
+            # Outros formatos de ícone
             else:
                 return menu.web_icon
 
@@ -70,6 +90,11 @@ class SchedulerDashboard(models.TransientModel):
             'helpdesk': 'fa fa-life-ring',
             'agendamento': 'fa fa-calendar-check',
             'scheduler': 'fa fa-clock',
+            'cadastros': 'fa fa-database',
+            'configuracao': 'fa fa-cog',
+            'configurações': 'fa fa-cog',
+            'apps': 'fa fa-th',
+            'aplicativos': 'fa fa-th',
         }
 
         # Buscar por palavra-chave no nome do menu
@@ -80,6 +105,20 @@ class SchedulerDashboard(models.TransientModel):
 
         # Ícone padrão
         return 'fa fa-folder'
+
+    def _get_icon_type(self, web_icon):
+        """Determina o tipo do ícone para renderização no frontend"""
+        if not web_icon:
+            return 'fontawesome'
+
+        if ',' in web_icon and 'static' in web_icon:
+            return 'image'
+        elif web_icon.startswith('fa-') or web_icon.startswith('fa '):
+            return 'fontawesome'
+        elif web_icon.startswith('/') or web_icon.startswith('http'):
+            return 'image'
+        else:
+            return 'fontawesome'
 
     @api.model
     def get_dashboard_data(self):
