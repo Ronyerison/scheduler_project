@@ -1,4 +1,9 @@
 <odoo>
+    <menuitem id="menu_scheduler_dashboard"
+              name="Dashboard"
+              sequence="0"
+              action="scheduler_core.action_scheduler_dashboard"/>
+
     <menuitem id="base.menu_management"
               groups="base.group_system" />
 

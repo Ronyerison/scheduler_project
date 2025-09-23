@@ -24,14 +24,19 @@
         'views/ordem_servico_views.xml',
         'views/material_views.xml',
         'wizard/views/gerar_os_wizard.xml',
+        'views/dashboard_action.xml',
         'views/menu.xml',
     ],
     "assets": {
         "web.assets_backend": [
             "/scheduler_core/static/lib/inputmask/inputmask.min.js",
             "/scheduler_core/static/src/js/field_mask.js",
+            "/scheduler_core/static/src/xml/dashboard_template.xml",
+            "/scheduler_core/static/src/js/dashboard.js",
+            "/scheduler_core/static/src/css/dashboard.css",
         ],
     },
     'installable': True,
     'application': True,
 }
+
