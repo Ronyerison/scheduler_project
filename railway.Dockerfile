@@ -21,7 +21,7 @@ COPY ./odoo/addons /mnt/extra-addons/
 COPY ./railway-odoo.conf.template /etc/odoo/odoo.conf.template
 
 # Criar script de inicialização
-RUN cat > /start-odoo.sh << 'EOF'
+RUN cat <<'EOF' > /start-odoo.sh
 #!/bin/bash
 set -e
 
