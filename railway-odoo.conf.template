@@ -9,9 +9,9 @@ admin_passwd = ${ADMIN_PASSWORD}
 # Configurações do banco (Railway PostgreSQL)
 db_host = ${PGHOST}
 db_port = ${PGPORT}
-db_user = ${PGUSER}
-db_password = ${PGPASSWORD}
-db_name = ${PGDATABASE}
+db_user = odoo
+db_password = odoo
+db_name = scheduler_db
 
 # Configurações de performance (otimizadas para Railway)
 limit_time_cpu = 600
