@@ -2,4 +2,92 @@
 
 /.idea/
 
+# ----------------------------------------
+# Python
+# ----------------------------------------
 __pycache__/
+*.py[cod]
+*$py.class
+
+# Virtualenv
+.venv/
+venv/
+ENV/
+env/
+.env
+
+# Distribuição / build
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Logs
+*.log
+
+# Testes / Cobertura
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytype/
+.mypy_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IDEs
+.vscode/
+.idea/
+
+# ----------------------------------------
+# Odoo
+# ----------------------------------------
+*.pot
+*.mo
+*.swp
+*.swo
+*.~*
+*.pydevproject
+.settings/
+.project
+*.zip
+
+# Sessões Odoo / Cache addons
+.odoo_session_dir/
+addons/*/__pycache__/
+addons/*/.pytest_cache/
+addons/*/.mypy_cache/
+addons/*/.idea/
+addons/*/.vscode/
+addons/*/node_modules/
+
+# ----------------------------------------
+# Node.js (se usar web assets no Odoo)
+# ----------------------------------------
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.pnpm-debug.log
