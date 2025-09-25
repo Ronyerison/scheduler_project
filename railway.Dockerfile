@@ -51,3 +51,4 @@ EXPOSE 8069
 
 # Comando de inicialização
 CMD ["/start-odoo.sh"]
+
