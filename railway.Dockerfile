@@ -17,7 +17,7 @@ RUN pip install pypdf
 COPY ./odoo/addons /mnt/extra-addons/
 
 # Copiar configuração para Railway
-COPY ./railway-odoo.conf /etc/odoo/odoo.conf
+COPY ./railway.odoo.conf /etc/odoo/odoo.conf
 
 # Criar diretório para logs
 RUN mkdir -p /var/log/odoo && chown odoo:odoo /var/log/odoo
