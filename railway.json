@@ -5,8 +5,8 @@
     "dockerfilePath": "railway.Dockerfile"
   },
   "deploy": {
-    "startCommand": "/start-odoo.sh",
+    "startCommand": "bash /start-odoo.sh",
     "healthcheckPath": "/web/login",
-    "healthcheckTimeout": 600
+    "healthcheckTimeout": 300
   }
 }
