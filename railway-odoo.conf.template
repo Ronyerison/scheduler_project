@@ -1,5 +1,4 @@
 [options]
-# Configurações básicas (adaptadas para Railway)
 addons_path = /mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons
 data_dir = /var/lib/odoo
 
@@ -9,21 +8,21 @@ admin_passwd = ${ADMIN_PASSWORD}
 # Configurações do banco (Railway PostgreSQL)
 db_host = ${PGHOST}
 db_port = ${PGPORT}
-db_user = odoo
-db_password = odoo
-db_name = scheduler_db
+db_user = ${ODOO_DB_USER}
+db_password = ${ODOO_DB_PASSWORD}
+db_name = ${ODOO_DB_NAME}
 
-# Configurações de performance (otimizadas para Railway)
+# Configurações de performance
 limit_time_cpu = 600
 limit_time_real = 1200
-limit_memory_hard = 1073741824  # 1GB (reduzido para Railway)
-limit_memory_soft = 838860800   # 800MB
-proxy_mode = True  # Importante para Railway
+limit_memory_hard = 1073741824
+limit_memory_soft = 838860800
+proxy_mode = True
 max_cron_threads = 1
-workers = 0  # Single-thread para economizar recursos
+workers = 0
 
-# Configurações de desenvolvimento/produção
+# Configurações de produção
 log_level = info
-list_db = False  # Segurança: não listar DBs em produção
-db_manager = False  # Segurança: desabilitar gerenciador de DB
-auto_reload = False  # Desabilitar em produção
+list_db = False
+db_manager = False
+auto_reload = False
