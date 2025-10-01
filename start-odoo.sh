@@ -34,9 +34,13 @@ else
     ODOO_PID=$!
 fi
 
-# Esperar página de login ficar disponível (Healthcheck)
+# Iniciar Nginx em foreground
+echo "Iniciando Nginx..."
+nginx &
+
+# Esperar Odoo ficar disponível
 echo "Aguardando Odoo web (/web/login) ficar disponível..."
-until curl -s -o /dev/null -w "%{http_code}" http://localhost:8069/web/login | grep -q "200"; do
+until curl -s -o /dev/null -w "%{http_code}" http://localhost:80/web/login | grep -q "200"; do
     sleep 2
 done
 
