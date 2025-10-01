@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     gettext-base \
     postgresql-client \
+    nginx \
     && rm -rf /var/lib/apt/lists/*
 
 # Instalar dependências Python
@@ -25,13 +26,16 @@ COPY ./railway-odoo.conf.template /etc/odoo/odoo.conf.template
 COPY ./start-odoo.sh /start-odoo.sh
 RUN chmod +x /start-odoo.sh
 
+# Copiar config do nginx
+COPY ./nginx.conf /etc/nginx/nginx.conf
+
 # Criar diretório para logs
 RUN mkdir -p /var/log/odoo && chown odoo:odoo /var/log/odoo
 
 USER odoo
 
-# Expor porta
-EXPOSE 8069
+# Expor porta pública
+EXPOSE 80
 
 # Comando de inicialização padrão
 CMD ["/start-odoo.sh"]
