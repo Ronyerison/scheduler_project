@@ -6,6 +6,7 @@
   },
   "deploy": {
     "startCommand": "bash /start-odoo.sh",
+    "port": 8069,
     "healthcheckPath": "/web/login",
     "healthcheckTimeout": 300
   }
