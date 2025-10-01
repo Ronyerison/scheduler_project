@@ -30,7 +30,7 @@ if [ "$TABLE_COUNT" -eq 0 ]; then
     ODOO_PID=$!
 else
     echo "Banco já possui tabelas ($TABLE_COUNT), pulando inicialização base."
-    odoo -c /etc/odoo/odoo.conf --without-demo=all &
+    odoo -c /etc/odoo/odoo.conf --without-demo=all --http-port=80 &
     ODOO_PID=$!
 fi
 
