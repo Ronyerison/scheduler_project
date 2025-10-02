@@ -24,6 +24,7 @@ envsubst < /etc/odoo/odoo.conf.template > /etc/odoo/odoo.conf
 echo "Verificando banco $ODOO_DB_NAME..."
 export PGPASSWORD="$ODOO_DB_PASSWORD"
 TABLE_COUNT=$(psql -h "$PGHOST" -U "$ODOO_DB_USER" -d "$ODOO_DB_NAME" -t -c "SELECT count(*) FROM information_schema.tables WHERE table_schema='public';" | xargs)
+
 if [ "$TABLE_COUNT" -eq 0 ]; then
     echo "Banco vazio, inicializando módulos base..."
     odoo -c /etc/odoo/odoo.conf -i base --without-demo=all &
@@ -32,6 +33,8 @@ else
     odoo -c /etc/odoo/odoo.conf --without-demo=all &
 fi
 
+ODOO_PID=$!
+
 # Aguardar Odoo responder internamente antes de liberar Nginx
 echo "Aguardando Odoo web (/web/login) ficar disponível..."
 until curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8069/web/login | grep -q "200"; do
@@ -39,6 +42,6 @@ until curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8069/web/login | g
 done
 echo "Odoo pronto! Página de login disponível."
 
-# Iniciar Nginx em foreground (mantém o container vivo)
+# Iniciar Nginx em foreground
 echo "Iniciando Nginx..."
 exec nginx -g "daemon off;"
