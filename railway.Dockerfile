@@ -33,8 +33,8 @@ COPY ./nginx.conf /etc/nginx/nginx.conf
 RUN mkdir -p /var/log/odoo && chown -R odoo:odoo /var/log/odoo
 
 # 🔥 Ajustar permissões para o Nginx rodar com usuário odoo
-RUN mkdir -p /var/lib/nginx /var/log/nginx /var/run && \
-    chown -R odoo:odoo /var/lib/nginx /var/log/nginx /var/run
+RUN mkdir -p /var/lib/nginx /var/log/nginx /var/run /run && \
+    chown -R odoo:odoo /var/lib/nginx /var/log/nginx /var/run /run
 
 USER odoo
 
