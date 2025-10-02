@@ -29,12 +29,9 @@ RUN chmod +x /start-odoo.sh
 # Copiar config do nginx
 COPY ./nginx.conf /etc/nginx/nginx.conf
 
-# Criar diretório para logs do Odoo
-RUN mkdir -p /var/log/odoo && chown -R odoo:odoo /var/log/odoo
-
-# Criar diretório para logs e pid do nginx
-RUN mkdir -p /var/log/odoo /var/log/nginx /var/run/nginx /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi  /var/lib/nginx/uwsgi /var/lib/nginx/scgi \
-    && chown -R odoo:odoo /var/log/odoo /var/log/nginx /var/run/nginx /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi  /var/lib/nginx/uwsgi /var/lib/nginx/scgi
+# Criar diretório para logs e cache do nginx
+RUN mkdir -p /var/log/odoo /var/lib/nginx /tmp/nginx \
+    && chown -R odoo:odoo /var/log/odoo /var/lib/nginx /tmp/nginx
 
 USER odoo
 

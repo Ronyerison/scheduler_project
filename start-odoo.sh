@@ -27,24 +27,18 @@ TABLE_COUNT=$(psql -h "$PGHOST" -U "$ODOO_DB_USER" -d "$ODOO_DB_NAME" -t -c "SEL
 if [ "$TABLE_COUNT" -eq 0 ]; then
     echo "Banco vazio, inicializando módulos base..."
     odoo -c /etc/odoo/odoo.conf -i base --without-demo=all &
-    ODOO_PID=$!
 else
     echo "Banco já possui tabelas ($TABLE_COUNT), pulando inicialização base."
     odoo -c /etc/odoo/odoo.conf --without-demo=all &
-    ODOO_PID=$!
 fi
 
-# Iniciar Nginx em foreground
-echo "Iniciando Nginx..."
-nginx &
-
-# Esperar Odoo ficar disponível
+# Aguardar Odoo responder internamente antes de liberar Nginx
 echo "Aguardando Odoo web (/web/login) ficar disponível..."
-until curl -s -o /dev/null -w "%{http_code}" http://localhost:80/web/login | grep -q "200"; do
+until curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8069/web/login | grep -q "200"; do
     sleep 2
 done
-
 echo "Odoo pronto! Página de login disponível."
 
-# Esperar processo principal do Odoo terminar
-wait $ODOO_PID
+# Iniciar Nginx em foreground (mantém o container vivo)
+echo "Iniciando Nginx..."
+exec nginx -g "daemon off;"
