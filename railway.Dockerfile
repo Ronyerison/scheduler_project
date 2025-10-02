@@ -32,9 +32,9 @@ COPY ./nginx.conf /etc/nginx/nginx.conf
 # Criar diretório para logs do Odoo
 RUN mkdir -p /var/log/odoo && chown -R odoo:odoo /var/log/odoo
 
-# 🔥 Ajustar permissões para o Nginx rodar com usuário odoo
-RUN mkdir -p /var/lib/nginx /var/log/nginx /var/run && \
-    chown -R odoo:odoo /var/lib/nginx /var/log/nginx /var/run
+# Criar diretório para logs e pid do nginx
+RUN mkdir -p /var/log/odoo /var/log/nginx /var/run/nginx \
+    && chown -R odoo:odoo /var/log/odoo /var/log/nginx /var/run/nginx
 
 USER odoo
 
