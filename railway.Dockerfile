@@ -33,8 +33,8 @@ COPY ./nginx.conf /etc/nginx/nginx.conf
 RUN mkdir -p /var/log/odoo && chown -R odoo:odoo /var/log/odoo
 
 # Criar diretório para logs e pid do nginx
-RUN mkdir -p /var/log/odoo /var/log/nginx /var/run/nginx \
-    && chown -R odoo:odoo /var/log/odoo /var/log/nginx /var/run/nginx
+RUN mkdir -p /var/log/odoo /var/log/nginx /var/run/nginx /var/lib/nginx/body \
+    && chown -R odoo:odoo /var/log/odoo /var/log/nginx /var/run/nginx /var/lib/nginx/body
 
 USER odoo
 
